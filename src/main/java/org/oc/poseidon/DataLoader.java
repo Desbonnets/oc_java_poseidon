@@ -27,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
         // Créer des utilisateurs
         User user = new User();
         user.setUsername("user");
-        user.setPassword(passwordEncoder.encode("user"));
+        user.setPassword(passwordEncoder.encode("password"));
         user.setFullname("User");
         user.setRole("USER");
         userRepository.save(user);

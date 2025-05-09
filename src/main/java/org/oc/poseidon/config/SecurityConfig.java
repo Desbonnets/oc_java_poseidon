@@ -33,16 +33,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/app/login", "/app/error").permitAll()
+                        .requestMatchers("/login", "/error", "/", "/css").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/app/login").defaultSuccessUrl("/app/secure/article-details", true)
+                        .loginPage("/login").defaultSuccessUrl("/secure/article-details", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/app/logout")
-                        .logoutSuccessUrl("/app/login")
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
