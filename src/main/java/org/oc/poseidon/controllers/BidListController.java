@@ -1,6 +1,8 @@
 package org.oc.poseidon.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.BidList;
+import org.oc.poseidon.service.BidListService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,12 +16,19 @@ import jakarta.validation.Valid;
 
 @Controller
 public class BidListController {
-    // TODO: Inject Bid service
+
+    private final BidListService bidListService;
+
+    public BidListController(BidListService bidListService) {
+        this.bidListService = bidListService;
+    }
 
     @RequestMapping("/bidList/list")
-    public String home(Model model)
+    public String home(HttpServletRequest request, Model model)
     {
-        // TODO: call service find all bids to show to the view
+        model.addAttribute("remoteUser", request.getRemoteUser());
+        model.addAttribute("bidLists", bidListService.bidListAll());
+
         return "bidList/list";
     }
 
