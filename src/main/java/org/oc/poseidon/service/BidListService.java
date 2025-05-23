@@ -18,4 +18,21 @@ public class BidListService {
     public List<BidList> bidListAll() {
         return repo.findAll();
     }
+
+    public boolean addBidList(BidList bid)
+    {
+        boolean result = false;
+
+        if(
+                (bid.getAccount() != null || bid.getType() != null || bid.getBidQuantity() != null) &&
+                (!bid.getAccount().trim().isEmpty() || !bid.getType().trim().isEmpty())
+        )
+        {
+                repo.save(bid);
+                result = true;
+            }
+
+
+        return result;
+    }
 }

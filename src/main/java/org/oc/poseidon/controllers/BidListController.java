@@ -33,14 +33,21 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
+    public String addBidForm(BidList bid, Model model)
+    {
+        model.addAttribute("bidList", bid);
         return "bidList/add";
     }
 
     @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
-        return "bidList/add";
+    public String validate(@Valid BidList bid, BindingResult result, Model model)
+    {
+        if (result.hasErrors()) {
+            return "bidList/add";
+        }else {
+            bidListService.addBidList(bid);
+            return "redirect:/bidList/list";
+        }
     }
 
     @GetMapping("/bidList/update/{id}")
