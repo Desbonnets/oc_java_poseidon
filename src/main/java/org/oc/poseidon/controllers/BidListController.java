@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 public class BidListController {
 
     private final BidListService bidListService;
+    private static final String REDIRECT_BIDLIST = "REDIRECT_BIDLIST:/bidList/list";
 
     public BidListController(BidListService bidListService) {
         this.bidListService = bidListService;
@@ -40,10 +41,10 @@ public class BidListController {
     }
 
     @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model)
+    public String validate(@Valid BidList bid, BindingResult result)
     {
         if (!result.hasErrors() && bidListService.addBidList(bid)){
-                return "redirect:/bidList/list";
+                return REDIRECT_BIDLIST;
             }
 
         return "bidList/add";
@@ -60,10 +61,10 @@ public class BidListController {
 
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
-                             BindingResult result, Model model) {
+                             BindingResult result) {
 
         if (!result.hasErrors() && bidListService.updateBidList(bidList, id)){
-            return "redirect:/bidList/list";
+            return REDIRECT_BIDLIST;
         }
 
 
@@ -71,8 +72,8 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
-        return "redirect:/bidList/list";
+    public String deleteBid(@PathVariable("id") Integer id) {
+        bidListService.deleteBidList(id);
+        return REDIRECT_BIDLIST;
     }
 }
