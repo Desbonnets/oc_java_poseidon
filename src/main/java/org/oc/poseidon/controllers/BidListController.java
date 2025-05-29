@@ -3,13 +3,11 @@ package org.oc.poseidon.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.BidList;
 import org.oc.poseidon.service.BidListService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
@@ -18,7 +16,7 @@ import jakarta.validation.Valid;
 public class BidListController {
 
     private final BidListService bidListService;
-    private static final String REDIRECT_BIDLIST = "REDIRECT_BIDLIST:/bidList/list";
+    private static final String REDIRECT_BIDLIST = "redirect:/bidList/list";
 
     public BidListController(BidListService bidListService) {
         this.bidListService = bidListService;
@@ -40,6 +38,7 @@ public class BidListController {
         return "bidList/add";
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result)
     {
@@ -67,11 +66,10 @@ public class BidListController {
             return REDIRECT_BIDLIST;
         }
 
-
         return "bidList/update";
     }
 
-    @GetMapping("/bidList/delete/{id}")
+    @DeleteMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id) {
         bidListService.deleteBidList(id);
         return REDIRECT_BIDLIST;
