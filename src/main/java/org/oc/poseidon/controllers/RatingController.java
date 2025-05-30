@@ -45,16 +45,21 @@ public class RatingController {
     }
 
     @GetMapping("/rating/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model)
+    {
+        Rating rating = ratingService.ratingById(id);
+        model.addAttribute("rating", rating);
         return "rating/update";
     }
 
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Rating and return Rating list
-        return "redirect:/rating/list";
+                             BindingResult result, Model model)
+    {
+        if(!result.hasErrors() && ratingService.updateRating(rating, id)){
+            return REDIRECT_RATING;
+        }
+        return "rating/update";
     }
 
     @GetMapping("/rating/delete/{id}")
