@@ -29,13 +29,18 @@ public class RatingController {
     }
 
     @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
+    public String addRatingForm(Rating rating, Model model)
+    {
+        model.addAttribute("rating", rating);
         return "rating/add";
     }
 
     @PostMapping("/rating/validate")
-    public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
+    public String validate(@Valid Rating rating, BindingResult result, Model model)
+    {
+        if(!result.hasErrors() && ratingService.addRating(rating)){
+            return REDIRECT_RATING;
+        }
         return "rating/add";
     }
 
