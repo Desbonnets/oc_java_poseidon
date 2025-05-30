@@ -2,8 +2,7 @@ package org.oc.poseidon.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.CurvePoint;
-import org.oc.poseidon.service.BidListService;
-import org.oc.poseidon.service.CurveService;
+import org.oc.poseidon.service.CurvePointService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,31 +14,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 
 @Controller
-public class CurveController {
+public class CurvePointController {
 
-    private final CurveService curveService;
+    private final CurvePointService curvePointService;
+    private static final String REDIRECT_CURVEPOINTLIST = "redirect:/curvePoint/list";
 
-    public CurveController(CurveService curveService) {
-        this.curveService = curveService;
+    public CurvePointController(CurvePointService curvePointService) {
+        this.curvePointService = curvePointService;
     }
 
     @RequestMapping("/curvePoint/list")
     public String home(HttpServletRequest request, Model model)
     {
         model.addAttribute("remoteUser", request.getRemoteUser());
-        model.addAttribute("curvePoints", curveService.curveAll());
+        model.addAttribute("curvePoints", curvePointService.curveAll());
 
         return "curvePoint/list";
     }
 
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid) {
+    public String addCurvePointForm(CurvePoint curvePoint, Model model)
+    {
+
+        model.addAttribute("curvePoint", curvePoint);
         return "curvePoint/add";
     }
 
     @PostMapping("/curvePoint/validate")
-    public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
+    public String validate(@Valid CurvePoint curvePoint, BindingResult result) {
+
+        if (!result.hasErrors() && curvePointService.addCurvePoint(curvePoint)){
+            return REDIRECT_CURVEPOINTLIST;
+        }
+
         return "curvePoint/add";
     }
 
