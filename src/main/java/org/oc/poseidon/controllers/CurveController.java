@@ -1,6 +1,9 @@
 package org.oc.poseidon.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.CurvePoint;
+import org.oc.poseidon.service.BidListService;
+import org.oc.poseidon.service.CurveService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +16,19 @@ import jakarta.validation.Valid;
 
 @Controller
 public class CurveController {
-    // TODO: Inject Curve Point service
+
+    private final CurveService curveService;
+
+    public CurveController(CurveService curveService) {
+        this.curveService = curveService;
+    }
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
+    public String home(HttpServletRequest request, Model model)
     {
-        // TODO: find all Curve Point, add to model
+        model.addAttribute("remoteUser", request.getRemoteUser());
+        model.addAttribute("curvePoints", curveService.curveAll());
+
         return "curvePoint/list";
     }
 
