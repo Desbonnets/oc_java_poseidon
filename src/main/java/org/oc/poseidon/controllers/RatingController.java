@@ -62,9 +62,9 @@ public class RatingController {
         return "rating/update";
     }
 
-    @GetMapping("/rating/delete/{id}")
+    @DeleteMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
-        return "redirect:/rating/list";
+        ratingService.deleteRating(id);
+        return REDIRECT_RATING;
     }
 }
