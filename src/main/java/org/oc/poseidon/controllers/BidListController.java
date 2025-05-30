@@ -38,7 +38,6 @@ public class BidListController {
         return "bidList/add";
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result)
     {
