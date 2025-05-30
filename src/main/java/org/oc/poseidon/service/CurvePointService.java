@@ -1,5 +1,6 @@
 package org.oc.poseidon.service;
 
+import org.oc.poseidon.domain.BidList;
 import org.oc.poseidon.domain.CurvePoint;
 import org.oc.poseidon.repositories.CurvePointRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,31 @@ public class CurvePointService {
         if(validCurvePoint(curvePoint))
         {
             repo.save(curvePoint);
+            result = true;
+        }
+
+        return result;
+    }
+
+    public CurvePoint curvePointById(int id)
+    {
+        return repo.findById(id);
+    }
+
+    public boolean updateCurvePoint(CurvePoint formCurvePoint, int id)
+    {
+        boolean result = false;
+
+        CurvePoint curvePoint = repo.findById(id);
+
+        if(validCurvePoint(formCurvePoint)){
+
+            curvePoint.setCurveId(formCurvePoint.getCurveId());
+            curvePoint.setTerm(formCurvePoint.getTerm());
+            curvePoint.setValue(formCurvePoint.getValue());
+
+            repo.save(curvePoint);
+
             result = true;
         }
 
