@@ -1,24 +1,30 @@
 package org.oc.poseidon.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.Rating;
+import org.oc.poseidon.service.RatingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
+
+    private final RatingService ratingService;
+    private static final String REDIRECT_RATING = "redirect:/rating/list";
+
+    public RatingController(final RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
 
     @RequestMapping("/rating/list")
-    public String home(Model model)
+    public String home(HttpServletRequest request, Model model)
     {
-        // TODO: find all Rating, add to model
+        model.addAttribute("remoteUser", request.getRemoteUser());
+        model.addAttribute("ratings", ratingService.ratingAll());
         return "rating/list";
     }
 
