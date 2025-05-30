@@ -6,10 +6,7 @@ import org.oc.poseidon.service.CurvePointService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
@@ -70,9 +67,9 @@ public class CurvePointController {
         return "curvePoint/update";
     }
 
-    @GetMapping("/curvePoint/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
-        return "redirect:/curvePoint/list";
+    @DeleteMapping("/curvePoint/delete/{id}")
+    public String deleteBid(@PathVariable("id") Integer id) {
+        curvePointService.deleteCurvePoint(id);
+        return REDIRECT_CURVEPOINTLIST;
     }
 }

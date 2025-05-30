@@ -1,6 +1,5 @@
 package org.oc.poseidon.service;
 
-import org.oc.poseidon.domain.BidList;
 import org.oc.poseidon.domain.CurvePoint;
 import org.oc.poseidon.repositories.CurvePointRepository;
 import org.springframework.stereotype.Service;
@@ -62,6 +61,12 @@ public class CurvePointService {
         }
 
         return result;
+    }
+
+    public void deleteCurvePoint(int id)
+    {
+        CurvePoint curvePoint = curvePointById(id);
+        repo.delete(curvePoint);
     }
 
 }
