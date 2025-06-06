@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 public class RuleNameController {
 
     private final RuleNameService ruleNameService;
+    private static final String REDIRECT_RULE_NAME = "redirect:/ruleName/list";
 
     public RuleNameController(RuleNameService ruleNameService) {
         this.ruleNameService = ruleNameService;
@@ -48,16 +49,21 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model)
+    {
+        RuleName ruleName = ruleNameService.ruleNameById(id);
+        model.addAttribute("ruleName", ruleName);
         return "ruleName/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
-        return "redirect:/ruleName/list";
+                             BindingResult result)
+    {
+        if(!result.hasErrors() && ruleNameService.updateRuleName(ruleName, id)){
+            return REDIRECT_RULE_NAME;
+        }
+        return "ruleName/update";
     }
 
     @GetMapping("/ruleName/delete/{id}")

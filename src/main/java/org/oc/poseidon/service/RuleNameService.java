@@ -42,3 +42,32 @@ public class RuleNameService {
 
         return result;
     }
+
+    public RuleName ruleNameById(int id)
+    {
+        return repo.findById(id);
+    }
+
+    public boolean updateRuleName(RuleName formRuleName, int id)
+    {
+        boolean result = false;
+
+        RuleName ruleName = ruleNameById(id);
+
+        if(validRuleName(formRuleName)){
+
+            ruleName.setName(formRuleName.getName());
+            ruleName.setDescription(formRuleName.getDescription());
+            ruleName.setJson(formRuleName.getJson());
+            ruleName.setTemplate(formRuleName.getTemplate());
+            ruleName.setSqlStr(formRuleName.getSqlStr());
+            ruleName.setSqlPart(formRuleName.getSqlPart());
+
+            repo.save(ruleName);
+
+            result = true;
+        }
+
+        return result;
+    }
+
