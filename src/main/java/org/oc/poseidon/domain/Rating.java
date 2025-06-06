@@ -1,6 +1,7 @@
 package org.oc.poseidon.domain;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.NumberFormat;
 
 @Entity
 @Table(name = "rating")
@@ -11,6 +12,7 @@ public class Rating {
     private String moodysRating;
     private String sandPRating;
     private String fitchRating;
+    @NumberFormat(style = NumberFormat.Style.NUMBER)
     private Integer orderNumber;
 
     public Rating(String moodysRating, String sandPRating, String fitchRating, Integer orderNumber) {
