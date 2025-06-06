@@ -40,3 +40,29 @@ public class TradeService {
         return result;
     }
 
+    public Trade tradeById(int id)
+    {
+        return repo.findByTradeId(id);
+    }
+
+    public boolean updateTrade(Trade formTrade, int id)
+    {
+        boolean result = false;
+
+        Trade trade = tradeById(id);
+
+        if(validTrade(formTrade)){
+
+            trade.setAccount(formTrade.getAccount());
+            trade.setType(formTrade.getType());
+            trade.setBuyQuantity(formTrade.getBuyQuantity());
+
+            repo.save(trade);
+
+            result = true;
+        }
+
+        return result;
+    }
+
+}
