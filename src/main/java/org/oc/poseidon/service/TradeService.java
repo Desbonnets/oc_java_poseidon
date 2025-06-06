@@ -65,4 +65,10 @@ public class TradeService {
         return result;
     }
 
+    public void deleteTrade(int id)
+    {
+        Trade trade = tradeById(id);
+        repo.delete(trade);
+    }
+
 }
