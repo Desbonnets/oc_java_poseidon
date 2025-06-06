@@ -67,7 +67,7 @@ public class CurvePointController {
         return "curvePoint/update";
     }
 
-    @DeleteMapping("/curvePoint/delete/{id}")
+    @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id) {
         curvePointService.deleteCurvePoint(id);
         return REDIRECT_CURVEPOINTLIST;

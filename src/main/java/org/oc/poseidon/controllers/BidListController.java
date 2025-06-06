@@ -68,7 +68,7 @@ public class BidListController {
         return "bidList/update";
     }
 
-    @DeleteMapping("/bidList/delete/{id}")
+    @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id) {
         bidListService.deleteBidList(id);
         return REDIRECT_BIDLIST;

@@ -118,7 +118,7 @@ class BidListControllerTest {
 
     @Test
     void testDeleteBid() throws Exception {
-        mockMvc.perform(delete("/bidList/delete/1").with(csrf()))
+        mockMvc.perform(get("/bidList/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bidList/list"));
     }

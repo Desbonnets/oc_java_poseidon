@@ -122,7 +122,7 @@ class RatingControllerTest {
 
     @Test
     void testDeleteRating() throws Exception {
-        mockMvc.perform(delete("/rating/delete/1").with(csrf()))
+        mockMvc.perform(get("/rating/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rating/list"));
     }

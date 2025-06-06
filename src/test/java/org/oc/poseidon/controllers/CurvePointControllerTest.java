@@ -118,7 +118,7 @@ class CurvePointControllerTest {
 
     @Test
     void testDeleteCurvePoint() throws Exception {
-        mockMvc.perform(delete("/curvePoint/delete/1").with(csrf()))
+        mockMvc.perform(get("/curvePoint/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/curvePoint/list"));
     }
