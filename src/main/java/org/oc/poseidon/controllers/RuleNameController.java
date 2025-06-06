@@ -32,13 +32,18 @@ public class RuleNameController {
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
+    public String addRuleForm(RuleName ruleName, Model model)
+    {
+        model.addAttribute("ruleName", ruleName);
         return "ruleName/add";
     }
 
     @PostMapping("/ruleName/validate")
-    public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
+    public String validate(@Valid RuleName ruleName, BindingResult result)
+    {
+        if(!result.hasErrors() && ruleNameService.addRuleName(ruleName)){
+            return REDIRECT_RULE_NAME;
+        }
         return "ruleName/add";
     }
 

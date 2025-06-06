@@ -19,4 +19,26 @@ public class RuleNameService {
         return repo.findAll();
     }
 
-}
+    public boolean validRuleName(RuleName ruleName)
+    {
+        return (
+                ruleName.getName() != null ||
+                ruleName.getDescription() != null ||
+                ruleName.getJson() != null ||
+                ruleName.getTemplate() != null ||
+                ruleName.getSqlStr() != null ||
+                ruleName.getSqlPart() != null);
+    }
+
+    public boolean addRuleName(RuleName ruleName)
+    {
+        boolean result = false;
+
+        if(validRuleName(ruleName))
+        {
+            repo.save(ruleName);
+            result = true;
+        }
+
+        return result;
+    }
