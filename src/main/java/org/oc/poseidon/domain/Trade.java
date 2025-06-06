@@ -1,6 +1,7 @@
 package org.oc.poseidon.domain;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.sql.Timestamp;
 
@@ -14,6 +15,7 @@ public class Trade {
     private Integer tradeId;
     private String account;
     private String type;
+    @NumberFormat(style = NumberFormat.Style.CURRENCY)
     private Double buyQuantity;
     private Double sellQuantity;
     private Double buyPrice;
@@ -62,5 +64,13 @@ public class Trade {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Double getBuyQuantity() {
+        return buyQuantity;
+    }
+
+    public void setBuyQuantity(Double buyQuantity) {
+        this.buyQuantity = buyQuantity;
     }
 }

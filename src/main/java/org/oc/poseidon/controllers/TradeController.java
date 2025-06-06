@@ -1,6 +1,9 @@
 package org.oc.poseidon.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.oc.poseidon.domain.Rating;
 import org.oc.poseidon.domain.Trade;
+import org.oc.poseidon.service.TradeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +16,19 @@ import jakarta.validation.Valid;
 
 @Controller
 public class TradeController {
-    // TODO: Inject Trade service
+
+    private final TradeService tradeService;
+    private static final String REDIRECT_TRADE = "redirect:/trade/list";
+
+    public TradeController(TradeService tradeService) {
+        this.tradeService = tradeService;
+    }
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
+    public String home(HttpServletRequest request, Model model)
     {
-        // TODO: find all Trade, add to model
+        model.addAttribute("remoteUser", request.getRemoteUser());
+        model.addAttribute("trades", tradeService.tradeAll());
         return "trade/list";
     }
 
