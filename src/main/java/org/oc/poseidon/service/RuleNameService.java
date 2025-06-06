@@ -71,3 +71,10 @@ public class RuleNameService {
         return result;
     }
 
+    public void deleteRuleName(int id)
+    {
+        RuleName ruleName = ruleNameById(id);
+        repo.delete(ruleName);
+    }
+
+}
