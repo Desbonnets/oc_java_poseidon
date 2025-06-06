@@ -1,6 +1,9 @@
 package org.oc.poseidon.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.oc.poseidon.domain.Rating;
 import org.oc.poseidon.domain.RuleName;
+import org.oc.poseidon.service.RuleNameService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,12 +16,18 @@ import jakarta.validation.Valid;
 
 @Controller
 public class RuleNameController {
-    // TODO: Inject RuleName service
+
+    private final RuleNameService ruleNameService;
+
+    public RuleNameController(RuleNameService ruleNameService) {
+        this.ruleNameService = ruleNameService;
+    }
 
     @RequestMapping("/ruleName/list")
-    public String home(Model model)
+    public String home(HttpServletRequest request, Model model)
     {
-        // TODO: find all RuleName, add to model
+        model.addAttribute("remoteUser", request.getRemoteUser());
+        model.addAttribute("ruleNames", ruleNameService.ruleNameAll());
         return "ruleName/list";
     }
 
