@@ -3,6 +3,7 @@ package org.oc.poseidon.controllers;
 import org.oc.poseidon.domain.User;
 import org.oc.poseidon.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
+@PreAuthorize("hasRole('ADMIN')")
 @Controller
 public class UserController {
+
     @Autowired
     private UserRepository userRepository;
 

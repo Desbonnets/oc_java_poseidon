@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-
+@PreAuthorize("hasRole('ADMIN')")
 @Controller
 public class BidListController {
 
