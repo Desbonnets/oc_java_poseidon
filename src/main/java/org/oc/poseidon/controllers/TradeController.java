@@ -1,9 +1,9 @@
 package org.oc.poseidon.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.oc.poseidon.domain.Rating;
 import org.oc.poseidon.domain.Trade;
 import org.oc.poseidon.service.TradeService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
+@PreAuthorize("hasRole('ADMIN')")
 @Controller
 public class TradeController {
 
