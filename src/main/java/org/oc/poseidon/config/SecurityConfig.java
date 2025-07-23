@@ -19,9 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailService;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
-    public SecurityConfig(CustomUserDetailsService userDetailService) {
+    public SecurityConfig(CustomUserDetailsService userDetailService, CustomAuthenticationSuccessHandler successHandler) {
         this.userDetailService = userDetailService;
+        this.successHandler = successHandler;
     }
 
     @Bean
@@ -38,16 +40,18 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login").defaultSuccessUrl("/secure/article-details", true)
+                        .loginPage("/login")
+                        .successHandler(successHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
-                        .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
-                        .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/access-denied")
                 )
         ;
 
