@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot</title>
+</head>
+<body>
+<h3>User home</h3>
+<div>
+    Logged in user: <b th:inline="text" th:text="${remoteUser}" class="user"></b>
+    <form th:action="@{/logout}" method="POST">
+        <input type="submit" value="Logout"/>
+    </form>
+</div>
+<h2>Bienvenue</h2>
+</body>
+</html>
