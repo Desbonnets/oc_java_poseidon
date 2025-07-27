@@ -36,7 +36,7 @@ public class SecurityConfig {
         http
                 .securityMatcher("/**")
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/login", "/error", "/", "/static/**").permitAll()
+                        .requestMatchers("/login", "/access-denied", "/", "/static/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.oc.poseidon.domain.User;
 import org.oc.poseidon.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,8 +17,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(UserController.class)
-@WithMockUser(username = "user", roles = {"USER"})
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser(username = "user", roles = {"ADMIN"})
 class UserControllerTest {
 
     @Autowired
@@ -60,9 +62,9 @@ class UserControllerTest {
         mockMvc.perform(post("/user/validate")
                         .with(csrf())
                         .param("username", "testuser")
-                        .param("password", "password123")
+                        .param("password", "Password123!")
                         .param("fullname", "Test User")
-                        .param("role", "USER"))
+                        .param("role", "ROLE_USER"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/list"));
 
@@ -96,9 +98,9 @@ class UserControllerTest {
         mockMvc.perform(post("/user/update/1")
                         .with(csrf())
                         .param("username", "updateduser")
-                        .param("password", "newpassword")
+                        .param("password", "Newpassword1!")
                         .param("fullname", "Updated User")
-                        .param("role", "ADMIN"))
+                        .param("role", "ROLE_ADMIN"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/list"));
 
