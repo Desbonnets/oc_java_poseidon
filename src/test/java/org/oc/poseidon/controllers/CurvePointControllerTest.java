@@ -1,6 +1,7 @@
 package org.oc.poseidon.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.oc.poseidon.domain.CurvePoint;
@@ -40,6 +41,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("GET /curvePoint/list - Affiche la liste des points de courbe avec succès")
     void testHome() throws Exception {
         Mockito.when(curvePointService.curveAll()).thenReturn(Collections.singletonList(curvePoint));
 
@@ -54,6 +56,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("GET /curvePoint/add - Affiche le formulaire d'ajout d'un CurvePoint")
     void testAddCurvePointForm() throws Exception {
         mockMvc.perform(get("/curvePoint/add"))
                 .andExpect(status().isOk())
@@ -61,6 +64,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("POST /curvePoint/validate - Courbe valide, redirige vers la liste")
     void testValidateCurvePointValid() throws Exception {
         Mockito.when(curvePointService.addCurvePoint(any())).thenReturn(true);
 
@@ -74,6 +78,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("POST /curvePoint/validate - Courbe invalide, renvoie le formulaire avec erreurs")
     void testValidateCurvePointInvalid() throws Exception {
         mockMvc.perform(post("/curvePoint/validate")
                         .with(csrf())
@@ -85,9 +90,8 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("GET /curvePoint/update/1 - Affiche le formulaire de mise à jour d'une courbe")
     void testShowUpdateForm() throws Exception {
-        Mockito.when(curvePointService.curvePointById(1)).thenReturn(curvePoint);
-
         mockMvc.perform(get("/curvePoint/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("curvePoint"))
@@ -95,6 +99,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("POST /curvePoint/update/1 - Mise à jour valide, redirige vers la liste")
     void testUpdateCurvePointValid() throws Exception {
         Mockito.when(curvePointService.updateCurvePoint(any(), eq(1))).thenReturn(true);
 
@@ -108,6 +113,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("POST /curvePoint/update/1 - Mise à jour invalide, renvoie le formulaire avec erreurs")
     void testUpdateCurvePointInvalid() throws Exception {
         mockMvc.perform(post("/curvePoint/update/1")
                         .with(csrf())
@@ -119,6 +125,7 @@ class CurvePointControllerTest {
     }
 
     @Test
+    @DisplayName("GET /curvePoint/delete/1 - Supprime une courbe et redirige vers la liste")
     void testDeleteCurvePoint() throws Exception {
         mockMvc.perform(get("/curvePoint/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())

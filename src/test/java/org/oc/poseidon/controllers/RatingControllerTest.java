@@ -1,6 +1,7 @@
 package org.oc.poseidon.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.oc.poseidon.domain.Rating;
@@ -35,11 +36,12 @@ class RatingControllerTest {
 
     @BeforeEach
     void setUp() {
-        rating = new Rating("12","14","40",1);
+        rating = new Rating("12", "14", "40", 1);
         Mockito.when(ratingService.ratingById(1)).thenReturn(rating);
     }
 
     @Test
+    @DisplayName("GET /rating/list - Affiche la liste des notations")
     void testHome() throws Exception {
         Mockito.when(ratingService.ratingAll()).thenReturn(Collections.singletonList(rating));
 
@@ -54,6 +56,7 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("GET /rating/add - Affiche le formulaire d'ajout de notation")
     void testAddRatingForm() throws Exception {
         mockMvc.perform(get("/rating/add"))
                 .andExpect(status().isOk())
@@ -61,6 +64,7 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("POST /rating/validate - Validation d'une notation valide, redirection vers la liste")
     void testValidateRatingValid() throws Exception {
         Mockito.when(ratingService.addRating(any())).thenReturn(true);
 
@@ -75,6 +79,7 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("POST /rating/validate - Soumission invalide, retour au formulaire d'ajout")
     void testValidateRatingInvalid() throws Exception {
         mockMvc.perform(post("/rating/validate")
                         .with(csrf())
@@ -87,9 +92,8 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("GET /rating/update/1 - Affiche le formulaire de mise à jour")
     void testShowUpdateForm() throws Exception {
-        Mockito.when(ratingService.ratingById(1)).thenReturn(rating);
-
         mockMvc.perform(get("/rating/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("rating"))
@@ -97,6 +101,7 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("POST /rating/update/1 - Mise à jour valide d'une notation, redirection vers la liste")
     void testUpdateCRatingValid() throws Exception {
         Mockito.when(ratingService.updateRating(any(), eq(1))).thenReturn(true);
 
@@ -111,6 +116,7 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("POST /rating/update/1 - Mise à jour invalide, retour au formulaire")
     void testUpdateRatingInvalid() throws Exception {
         mockMvc.perform(post("/rating/update/1")
                         .with(csrf())
@@ -123,6 +129,7 @@ class RatingControllerTest {
     }
 
     @Test
+    @DisplayName("GET /rating/delete/1 - Supprime une notation et redirige vers la liste")
     void testDeleteRating() throws Exception {
         mockMvc.perform(get("/rating/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())

@@ -1,6 +1,7 @@
 package org.oc.poseidon.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.oc.poseidon.domain.RuleName;
@@ -17,8 +18,7 @@ import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -48,6 +48,7 @@ class RuleNameControllerTest {
     }
 
     @Test
+    @DisplayName("GET /ruleName/list - Affiche la liste des règles")
     void testHome() throws Exception {
         Mockito.when(ruleNameService.ruleNameAll()).thenReturn(Collections.singletonList(ruleName));
 
@@ -62,6 +63,7 @@ class RuleNameControllerTest {
     }
 
     @Test
+    @DisplayName("GET /ruleName/add - Affiche le formulaire d'ajout d'une règle")
     void testAddRuleNameForm() throws Exception {
         mockMvc.perform(get("/ruleName/add"))
                 .andExpect(status().isOk())
@@ -69,6 +71,7 @@ class RuleNameControllerTest {
     }
 
     @Test
+    @DisplayName("POST /ruleName/validate - Valide une règle correcte, redirection attendue")
     void testValidateRuleNameValid() throws Exception {
         Mockito.when(ruleNameService.addRuleName(any())).thenReturn(true);
 
@@ -80,9 +83,8 @@ class RuleNameControllerTest {
     }
 
     @Test
+    @DisplayName("GET /ruleName/update/1 - Affiche le formulaire de mise à jour")
     void testShowUpdateForm() throws Exception {
-        Mockito.when(ruleNameService.ruleNameById(1)).thenReturn(ruleName);
-
         mockMvc.perform(get("/ruleName/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("ruleName"))
@@ -90,6 +92,7 @@ class RuleNameControllerTest {
     }
 
     @Test
+    @DisplayName("POST /ruleName/update/1 - Met à jour une règle valide")
     void testUpdateCRuleNameValid() throws Exception {
         Mockito.when(ruleNameService.updateRuleName(any(), eq(1))).thenReturn(true);
 
@@ -101,6 +104,7 @@ class RuleNameControllerTest {
     }
 
     @Test
+    @DisplayName("GET /ruleName/delete/1 - Supprime une règle et redirige vers la liste")
     void testDeleteRuleName() throws Exception {
         mockMvc.perform(get("/ruleName/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())

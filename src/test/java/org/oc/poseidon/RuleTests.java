@@ -20,27 +20,28 @@ public class RuleTests {
 	private RuleNameRepository ruleNameRepository;
 
 	@Test
-	public void ruleTest() {
+	public void ruleNameEntityCrudOperationsShouldWork() {
+		// Création d'une entité RuleName
 		RuleName rule = new RuleName("Rule Name", "Description", "Json", "Template", "SQL", "SQL Part");
 
 		// Save
 		rule = ruleNameRepository.save(rule);
-		Assert.assertNotNull(rule.getId());
-		Assert.assertTrue(rule.getName().equals("Rule Name"));
+		Assert.assertNotNull("L'ID ne doit pas être null après un save", rule.getId());
+		Assert.assertEquals("Rule Name", rule.getName());
 
 		// Update
 		rule.setName("Rule Name Update");
 		rule = ruleNameRepository.save(rule);
-		Assert.assertTrue(rule.getName().equals("Rule Name Update"));
+		Assert.assertEquals("Rule Name Update", rule.getName());
 
 		// Find
 		List<RuleName> listResult = ruleNameRepository.findAll();
-		Assert.assertTrue(listResult.size() > 0);
+		Assert.assertFalse("La liste des règles ne doit pas être vide", listResult.isEmpty());
 
 		// Delete
 		Integer id = rule.getId();
 		ruleNameRepository.delete(rule);
-		Optional<RuleName> ruleList = ruleNameRepository.findById(id);
-		Assert.assertFalse(ruleList.isPresent());
+		Optional<RuleName> deletedRule = ruleNameRepository.findById(id);
+		Assert.assertFalse("L'entité RuleName devrait avoir été supprimée", deletedRule.isPresent());
 	}
 }

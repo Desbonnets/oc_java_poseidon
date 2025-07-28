@@ -9,10 +9,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PasswordEncodeTest {
+
     @Test
-    public void testPassword() {
+    public void shouldGenerateEncodedPassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String pw = encoder.encode("123456");
-        System.out.println("[ "+ pw + " ]");
+        String encodedPassword = encoder.encode("123456");
+        System.out.println("[ " + encodedPassword + " ]");
     }
 }

@@ -20,27 +20,28 @@ public class TradeTests {
 	private TradeRepository tradeRepository;
 
 	@Test
-	public void tradeTest() {
+	public void tradeEntityCrudOperationsShouldWork() {
+		// Création d’un Trade
 		Trade trade = new Trade("Trade Account", "Type");
 
 		// Save
 		trade = tradeRepository.save(trade);
-		Assert.assertNotNull(trade.getTradeId());
-		Assert.assertTrue(trade.getAccount().equals("Trade Account"));
+		Assert.assertNotNull("L'ID ne doit pas être null après sauvegarde", trade.getTradeId());
+		Assert.assertEquals("Trade Account", trade.getAccount());
 
 		// Update
 		trade.setAccount("Trade Account Update");
 		trade = tradeRepository.save(trade);
-		Assert.assertTrue(trade.getAccount().equals("Trade Account Update"));
+		Assert.assertEquals("Trade Account Update", trade.getAccount());
 
 		// Find
-		List<Trade> listResult = tradeRepository.findAll();
-		Assert.assertTrue(listResult.size() > 0);
+		List<Trade> trades = tradeRepository.findAll();
+		Assert.assertFalse("La liste des trades ne doit pas être vide", trades.isEmpty());
 
 		// Delete
 		Integer id = trade.getTradeId();
 		tradeRepository.delete(trade);
-		Optional<Trade> tradeList = tradeRepository.findById(id);
-		Assert.assertFalse(tradeList.isPresent());
+		Optional<Trade> deletedTrade = tradeRepository.findById(id);
+		Assert.assertFalse("Le trade devrait avoir été supprimé", deletedTrade.isPresent());
 	}
 }

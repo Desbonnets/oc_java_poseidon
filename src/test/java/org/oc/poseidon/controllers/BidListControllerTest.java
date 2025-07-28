@@ -1,6 +1,7 @@
 package org.oc.poseidon.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.oc.poseidon.domain.BidList;
@@ -40,6 +41,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("GET /bidList/list - Affiche la liste des bids avec les données attendues")
     void testHome() throws Exception {
         Mockito.when(bidListService.bidListAll()).thenReturn(Arrays.asList(bid));
 
@@ -54,6 +56,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("GET /bidList/add - Affiche le formulaire d'ajout d'un bid")
     void testAddBidForm() throws Exception {
         mockMvc.perform(get("/bidList/add"))
                 .andExpect(status().isOk())
@@ -61,6 +64,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("POST /bidList/validate - Ajout valide redirige vers la liste")
     void testValidateBidValid() throws Exception {
         Mockito.when(bidListService.addBidList(any())).thenReturn(true);
 
@@ -74,6 +78,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("POST /bidList/validate - Ajout invalide affiche à nouveau le formulaire")
     void testValidateBidInvalid() throws Exception {
         mockMvc.perform(post("/bidList/validate")
                         .with(csrf())
@@ -85,9 +90,8 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("GET /bidList/update/1 - Affiche le formulaire de mise à jour")
     void testShowUpdateForm() throws Exception {
-        Mockito.when(bidListService.bidListById(1)).thenReturn(bid);
-
         mockMvc.perform(get("/bidList/update/1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("bidList"))
@@ -95,6 +99,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("POST /bidList/update/1 - Mise à jour valide redirige vers la liste")
     void testUpdateBidValid() throws Exception {
         Mockito.when(bidListService.updateBidList(any(), eq(1))).thenReturn(true);
 
@@ -108,6 +113,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("POST /bidList/update/1 - Mise à jour invalide affiche à nouveau le formulaire")
     void testUpdateBidInvalid() throws Exception {
         mockMvc.perform(post("/bidList/update/1")
                         .with(csrf())
@@ -119,6 +125,7 @@ class BidListControllerTest {
     }
 
     @Test
+    @DisplayName("GET /bidList/delete/1 - Supprime un bid et redirige vers la liste")
     void testDeleteBid() throws Exception {
         mockMvc.perform(get("/bidList/delete/1").with(csrf()))
                 .andExpect(status().is3xxRedirection())

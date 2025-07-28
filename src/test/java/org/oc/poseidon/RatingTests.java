@@ -1,10 +1,10 @@
 package org.oc.poseidon;
 
-import org.oc.poseidon.domain.Rating;
-import org.oc.poseidon.repositories.RatingRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.oc.poseidon.domain.Rating;
+import org.oc.poseidon.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -12,6 +12,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Test d'intégration de la classe Rating et de RatingRepository.
+ * Ce test couvre les opérations de base : création, mise à jour, récupération et suppression.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RatingTests {
@@ -20,27 +24,28 @@ public class RatingTests {
 	private RatingRepository ratingRepository;
 
 	@Test
-	public void ratingTest() {
+	public void ratingEntityCrudOperationsShouldWork() {
+		// Création d'une entité Rating
 		Rating rating = new Rating("Moodys Rating", "Sand PRating", "Fitch Rating", 10);
 
-		// Save
+		// Sauvegarde
 		rating = ratingRepository.save(rating);
-		Assert.assertNotNull(rating.getId());
-		Assert.assertTrue(rating.getOrderNumber() == 10);
+		Assert.assertNotNull("L'ID ne doit pas être null après un save", rating.getId());
+		Assert.assertEquals(10, (int) rating.getOrderNumber());
 
-		// Update
+		// Mise à jour
 		rating.setOrderNumber(20);
 		rating = ratingRepository.save(rating);
-		Assert.assertTrue(rating.getOrderNumber() == 20);
+		Assert.assertEquals(20, (int) rating.getOrderNumber());
 
-		// Find
+		// Récupération
 		List<Rating> listResult = ratingRepository.findAll();
-		Assert.assertTrue(listResult.size() > 0);
+		Assert.assertFalse("La liste des ratings ne doit pas être vide", listResult.isEmpty());
 
-		// Delete
+		// Suppression
 		Integer id = rating.getId();
 		ratingRepository.delete(rating);
-		Optional<Rating> ratingList = ratingRepository.findById(id);
-		Assert.assertFalse(ratingList.isPresent());
+		Optional<Rating> deletedRating = ratingRepository.findById(id);
+		Assert.assertFalse("L'entité rating devrait avoir été supprimée", deletedRating.isPresent());
 	}
 }
