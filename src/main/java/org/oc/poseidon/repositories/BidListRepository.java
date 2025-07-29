@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BidListRepository extends JpaRepository<BidList, Integer> {
 
-    BidList findByBidListId(int id);
+    BidList findById(int id);
 }

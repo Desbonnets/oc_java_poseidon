@@ -72,7 +72,7 @@ public class BidListService {
      * @return l'objet trouvé, ou null s'il n'existe pas
      */
     public BidList bidListById(int id) {
-        return repo.findByBidListId(id);
+        return repo.findById(id);
     }
 
     /**
@@ -85,7 +85,7 @@ public class BidListService {
     public boolean updateBidList(BidList formBid, int id) {
         boolean result = false;
 
-        BidList bid = repo.findByBidListId(id);
+        BidList bid = repo.findById(id);
 
         if (validBidList(formBid)) {
             bid.setAccount(formBid.getAccount());
