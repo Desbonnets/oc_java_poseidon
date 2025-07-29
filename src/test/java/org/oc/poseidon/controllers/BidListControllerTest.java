@@ -1,0 +1,134 @@
+package org.oc.poseidon.controllers;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.oc.poseidon.domain.BidList;
+import org.oc.poseidon.service.BidListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Arrays;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser(username = "user", roles = {"ADMIN"})
+class BidListControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private BidListService bidListService;
+
+    private BidList bid;
+
+    @BeforeEach
+    void setUp() {
+        bid = new BidList("Account Test", "Type Test", 10.0);
+        Mockito.when(bidListService.bidListById(1)).thenReturn(bid);
+    }
+
+    @Test
+    @DisplayName("GET /bidList/list - Affiche la liste des bids avec les données attendues")
+    void testHome() throws Exception {
+        Mockito.when(bidListService.bidListAll()).thenReturn(Arrays.asList(bid));
+
+        mockMvc.perform(get("/bidList/list").with(request -> {
+                    request.setRemoteUser("testuser");
+                    return request;
+                }))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("bidLists"))
+                .andExpect(model().attributeExists("remoteUser"))
+                .andExpect(view().name("bidList/list"));
+    }
+
+    @Test
+    @DisplayName("GET /bidList/add - Affiche le formulaire d'ajout d'un bid")
+    void testAddBidForm() throws Exception {
+        mockMvc.perform(get("/bidList/add"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/add"));
+    }
+
+    @Test
+    @DisplayName("POST /bidList/validate - Ajout valide redirige vers la liste")
+    void testValidateBidValid() throws Exception {
+        Mockito.when(bidListService.addBidList(any())).thenReturn(true);
+
+        mockMvc.perform(post("/bidList/validate")
+                        .with(csrf())
+                        .param("account", "TestAccount")
+                        .param("type", "TestType")
+                        .param("bidQuantity", "123"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidList/list"));
+    }
+
+    @Test
+    @DisplayName("POST /bidList/validate - Ajout invalide affiche à nouveau le formulaire")
+    void testValidateBidInvalid() throws Exception {
+        mockMvc.perform(post("/bidList/validate")
+                        .with(csrf())
+                        .param("account", "")
+                        .param("type", "TestType")
+                        .param("bidQuantity", "-1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/add"));
+    }
+
+    @Test
+    @DisplayName("GET /bidList/update/1 - Affiche le formulaire de mise à jour")
+    void testShowUpdateForm() throws Exception {
+        mockMvc.perform(get("/bidList/update/1"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("bidList"))
+                .andExpect(view().name("bidList/update"));
+    }
+
+    @Test
+    @DisplayName("POST /bidList/update/1 - Mise à jour valide redirige vers la liste")
+    void testUpdateBidValid() throws Exception {
+        Mockito.when(bidListService.updateBidList(any(), eq(1))).thenReturn(true);
+
+        mockMvc.perform(post("/bidList/update/1")
+                        .with(csrf())
+                        .param("account", "UpdatedAccount")
+                        .param("type", "UpdatedType")
+                        .param("bidQuantity", "456.0"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidList/list"));
+    }
+
+    @Test
+    @DisplayName("POST /bidList/update/1 - Mise à jour invalide affiche à nouveau le formulaire")
+    void testUpdateBidInvalid() throws Exception {
+        mockMvc.perform(post("/bidList/update/1")
+                        .with(csrf())
+                        .param("account", "")
+                        .param("type", "")
+                        .param("bidQuantity", "-1.0"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bidList/update"));
+    }
+
+    @Test
+    @DisplayName("GET /bidList/delete/1 - Supprime un bid et redirige vers la liste")
+    void testDeleteBid() throws Exception {
+        mockMvc.perform(get("/bidList/delete/1").with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bidList/list"));
+    }
+}
