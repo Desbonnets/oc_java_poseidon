@@ -87,12 +87,12 @@ class BidListServiceTest {
     @DisplayName("bidListById retourne le bid avec l'id donné")
     void bidListById_ShouldReturnBid() {
         BidList bid = new BidList();
-        when(bidListRepository.findById(1)).thenReturn(bid);
+        when(bidListRepository.findByBidListId(1)).thenReturn(bid);
 
         BidList result = bidListService.bidListById(1);
 
         assertThat(result).isEqualTo(bid);
-        verify(bidListRepository).findById(1);
+        verify(bidListRepository).findByBidListId(1);
     }
 
     @Test
@@ -108,7 +108,7 @@ class BidListServiceTest {
         form.setType("New");
         form.setBidQuantity(99.0);
 
-        when(bidListRepository.findById(1)).thenReturn(existing);
+        when(bidListRepository.findByBidListId(1)).thenReturn(existing);
 
         boolean result = bidListService.updateBidList(form, 1);
 
@@ -123,7 +123,7 @@ class BidListServiceTest {
         BidList existing = new BidList();
         BidList form = new BidList(); // invalide
 
-        when(bidListRepository.findById(1)).thenReturn(existing);
+        when(bidListRepository.findByBidListId(1)).thenReturn(existing);
 
         boolean result = bidListService.updateBidList(form, 1);
 
@@ -135,7 +135,7 @@ class BidListServiceTest {
     @DisplayName("deleteBidList supprime un bid existant")
     void deleteBidList_ShouldDelete() {
         BidList bid = new BidList();
-        when(bidListRepository.findById(1)).thenReturn(bid);
+        when(bidListRepository.findByBidListId(1)).thenReturn(bid);
 
         bidListService.deleteBidList(1);
 

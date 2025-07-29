@@ -40,14 +40,14 @@ public class BidListService {
 
     public BidList bidListById(int id)
     {
-        return repo.findById(id);
+        return repo.findByBidListId(id);
     }
 
     public boolean updateBidList(BidList formBid, int id)
     {
         boolean result = false;
 
-        BidList bid = repo.findById(id);
+        BidList bid = repo.findByBidListId(id);
 
         if(validBidList(formBid)){
 
