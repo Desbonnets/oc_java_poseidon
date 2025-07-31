@@ -44,8 +44,9 @@ public class CurvePointService {
      * @return true si l'objet est valide, false sinon
      */
     public boolean validCurvePoint(CurvePoint curvePoint) {
-        return (curvePoint.getCurveId() != null) &&
-                (!curvePoint.getValue().isNaN() || !curvePoint.getTerm().isNaN());
+        return curvePoint.getCurveId() != null &&
+                (curvePoint.getValue() == null || !Double.isNaN(curvePoint.getValue())) &&
+                (curvePoint.getTerm() == null || !Double.isNaN(curvePoint.getTerm()));
     }
 
     /**

@@ -32,7 +32,9 @@
 				<label for="bidQuantity" class="col-sm-2 control-label">Bid Quantity</label>
 				<div class="col-sm-10">
 					<input type="number" th:field="*{bidQuantity}" id="bidQuantity" placeholder="Bid Quantity" class="col-4">
-					<p class="text-danger" th:if="${#fields.hasErrors('bidQuantity')}" th:errors="*{bidQuantity}"></p>
+					<p class="text-danger" th:if="${#fields.hasErrors('bidQuantity')}">
+						Format de nombre invalide. Veuillez entrer un nombre au format monétaire.
+					</p>
 				</div>
 			</div>
 

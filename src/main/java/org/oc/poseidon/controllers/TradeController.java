@@ -3,14 +3,13 @@ package org.oc.poseidon.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.Trade;
 import org.oc.poseidon.service.TradeService;
+import org.oc.poseidon.validation.FlexibleDoubleEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
@@ -128,5 +127,14 @@ public class TradeController {
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         tradeService.deleteTrade(id);
         return REDIRECT_TRADE;
+    }
+
+    /**
+     * Permet de modifier une value de format double qu'elle soit accepter (12.5 et 12,5)
+     * @param binder
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Double.class, new FlexibleDoubleEditor());
     }
 }
