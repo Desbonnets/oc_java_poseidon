@@ -3,10 +3,12 @@ package org.oc.poseidon.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import org.oc.poseidon.domain.CurvePoint;
 import org.oc.poseidon.service.CurvePointService;
+import org.oc.poseidon.validation.FlexibleDoubleEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -126,5 +128,14 @@ public class CurvePointController {
     public String deleteBid(@PathVariable("id") Integer id) {
         curvePointService.deleteCurvePoint(id);
         return REDIRECT_CURVEPOINTLIST;
+    }
+
+    /**
+     * Permet de modifier une value de format double qu'elle soit accepter (12.5 et 12,5)
+     * @param binder
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Double.class, new FlexibleDoubleEditor());
     }
 }
